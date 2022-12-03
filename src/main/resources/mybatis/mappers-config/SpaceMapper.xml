@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.waveshare.miaochuu.mapper.SpaceMapper">
+    <insert id="addClassify"></insert>
+    <insert id="addFork"></insert>
+    <insert id="addVersion"></insert>
+    <update id="setClassify"></update>
+    <update id="updateProject"></update>
+    <update id="updateVersion"></update>
+    <update id="updateDescription"></update>
+
+    <select id="getPinned"></select>
+    <select id="getClassifyInfoWithProjectInfo"></select>
+    <select id="getFavorites"></select>
+    <select id="getProjects"></select>
+    <select id="getActivities"></select>
+    <select id="getProjectsInFavorite"></select>
+    <select id="getClassifyInfo"></select>
+    <select id="getProjectInfoForClassify"></select>
+</mapper>

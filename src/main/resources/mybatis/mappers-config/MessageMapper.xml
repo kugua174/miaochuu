@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.waveshare.miaochuu.mapper.MessageMapper">
+    <insert id="add"></insert>
+    <update id="updateAgreeOrNot"></update>
+    <select id="getPush"></select>
+    <select id="getMyPush"></select>
+    <select id="getUsers"></select>
+</mapper>

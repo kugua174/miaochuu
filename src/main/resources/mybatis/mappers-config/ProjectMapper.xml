@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.waveshare.miaochuu.mapper.ProjectMapper">
+    <insert id="insertFollowInfo"></insert>
+    <insert id="addComment"></insert>
+    <insert id="addBulletComment"></insert>
+
+    <select id="getInfo" resultType="com.waveshare.miaochuu.bean.Project"></select>
+    <select id="getVersionInfo" resultType="com.waveshare.miaochuu.bean.Version"></select>
+    <select id="getTagsInfo" resultType="com.waveshare.miaochuu.bean.project.TagInfo"></select>
+    <select id="getDescriptionsInfo"></select>
+    <select id="getForks"></select>
+    <select id="getVersions" resultType="com.waveshare.miaochuu.bean.project.VersionInfoForList"></select>
+    <select id="getBulletComments"></select>
+    <select id="getComments" resultType="com.waveshare.miaochuu.bean.project.FloorCommentInfo"></select>
+    <select id="getFavoriteProject" resultType="java.lang.Integer"></select>
+</mapper>
