@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 public class ProjectInfo {
     private int projectID;
     private int versionID;
-    private int videoCoverUUID;
-    private int videoUUID;
+    private String videoCoverUUID;
+    private String videoUUID;
     private String content;
     private String idea;
-    private int imageUUID;
+    private String imageUUID;
     private String projectName;
     private int progress;
     private String userName;
