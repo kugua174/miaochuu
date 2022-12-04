@@ -3,9 +3,79 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.waveshare.miaochuu.mapper.MessageMapper">
-    <insert id="add"></insert>
-    <update id="updateAgreeOrNot"></update>
-    <select id="getPush"></select>
-    <select id="getMyPush"></select>
-    <select id="getUsers"></select>
+    <select id="getUsers" resultType="com.waveshare.miaochuu.bean.User">
+        select distinct s.*
+        from (select UserID, UserName, AvatarUUID
+              from User,
+                   Message
+              where Message_UserID = Userid
+                and Message_TargetUserID = #{userID}
+              union all
+              select UserID, UserName, AvatarUUID
+              from User,
+                   Message
+              where Message_TargetUserID = Userid
+                and Message_UserID = #{userID}) s;
+    </select>
+    <update id="updateAgreeOrNot">
+        update Version
+        set IsCheck=1,
+            IsAgree=#{isAgree}
+        where versionid = #{versionID};
+    </update>
+    <select id="getPush" resultType="com.waveshare.miaochuu.bean.message.ProjectInfoFromPush">
+        select VersionID,
+               VersionNum,
+               PushIntroduce,
+               ProjectName,
+               ProjectID,
+               IsCheck,
+               IsAgree,
+               VersionDate,
+               username,
+               userid
+        from Version,
+             User,
+             project,
+             fork
+        where Version_ForkID = ForkID
+          and Fork_ProjectID = ProjectID
+          and Project_UserID = #{userID}
+          and UserID = Version_UserID;
+    </select>
+    <select id="getMyPush" resultType="com.waveshare.miaochuu.bean.message.ProjectInfoFromPush">
+        select VersionID,
+               VersionNum,
+               PushIntroduce,
+               ProjectName,
+               ProjectID,
+               IsCheck,
+               IsAgree,
+               VersionDate,
+               username,
+               userid
+        from Version,
+             User,
+             project,
+             fork
+        where Version_ForkID = ForkID
+          and Fork_ProjectID = ProjectID
+          and Project_UserID = UserID
+          and Version_UserID = #{userID};
+    </select>
+    <select id="getMessage" resultType="com.waveshare.miaochuu.bean.Message">
+        select *
+        from Message
+        where Message_UserID = #{userID}
+          and Message_TargetUserID = #{targetUserID}
+        union
+        select *
+        from Message
+        where Message_TargetUserID = #{userID}
+          and Message_UserID = #{targetUserID}
+        order by date;
+    </select>
+    <insert id="add">
+        insert into Message(Content, Date, Message_UserID, Message_TargetUserID) value (#{content},#{date},#{userID},#{targetUserID});
+    </insert>
 </mapper>

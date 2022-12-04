@@ -26,8 +26,8 @@ public interface ProjectService {
 
     Boolean favorite(int projectID, int favoriteID);
 
-    Boolean addComment(int userID, String content, int projectID, int activityID, int replyCommentID, int floorCommentID);
+    Boolean addComment(int userID, String content, Integer projectID, Integer activityID, Integer replyCommentID, Integer floorCommentID);
 
-    Boolean addBulletComment(int content, String sendTime, int userID, int versionID);
+    Boolean addBulletComment(String content, String sendTime, int userID, int versionID);
 
 }

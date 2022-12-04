@@ -6,10 +6,12 @@
     <resultMap id="ProjectMap" type="com.waveshare.miaochuu.bean.Project">
 
     </resultMap>
-    <resultMap id="TagInfoMap" type="com.waveshare.miaochuu.bean.project.TagInfo"></resultMap>
+    <resultMap id="TagInfoMap" type="com.waveshare.miaochuu.bean.project.TagInfo">
+    </resultMap>
     <resultMap id="VersionInfoForListMap" type="com.waveshare.miaochuu.bean.project.VersionInfoForList"></resultMap>
-    <resultMap id="BulletCommentsMap" type="com.waveshare.miaochuu.bean.BulletComment"></resultMap>
-    <resultMap id="CommentsMap" type="com.waveshare.miaochuu.bean.project.FloorCommentInfo"></resultMap>
+    <resultMap id="CommentsMap" type="com.waveshare.miaochuu.bean.project.FloorCommentInfo">
+
+    </resultMap>
 
     <select id="getInfo" resultType="com.waveshare.miaochuu.bean.Project">
         select *
@@ -50,7 +52,7 @@
     <select id="getBulletComments" resultType="com.waveshare.miaochuu.bean.BulletComment">
         select *
         from BulletComment
-        where BulletComment_VersionID=#{versionID};
+        where BulletComment_VersionID = #{versionID};
     </select>
     <select id="getComments" resultMap="CommentsMap">
 
@@ -61,12 +63,33 @@
     </insert>
     <insert id="addComment">
         insert into comment(Content, CommentDate, Comment_ProjectID, Comment_ActivityID, Reply_CommentID,
-                            Floor_CommentID, Comment_UserID) value(content,CommentDate,projectID,activityID,replyCommentID,floorCommentID,userID);
+                            Floor_CommentID,
+                            Comment_UserID) value (#{content},#{CommentDate},#{projectID},#{activityID},#{replyCommentID},#{floorCommentID},#{userID});
     </insert>
     <insert id="addBulletComment">
-        insert into BulletComment(content, data, sendtime, BulletComment_VersionID, BulletComment_UserID) value(content,data,sendTime,versionID,userID);
+        insert into BulletComment(content, date, sendtime, BulletComment_VersionID,
+                                  BulletComment_UserID) value (#{content},#{date},#{sendTime},#{versionID},#{userID});
     </insert>
     <insert id="insertProjectInFavorite">
-        insert into `favorite&amp;project`(favoriteid, fp_projectid) value(projectID,favoriteID);
+        insert into `favorite&amp;project`(FP_FavoriteID, fp_projectid) value (#{favoriteID},#{projectID});
     </insert>
+    <select id="getApplicationAreaInfoByProjectID" resultType="com.waveshare.miaochuu.bean.ApplicationArea">
+        select ApplicationAreaName, imgUUID
+        from ApplicationArea,
+             `Project&amp;ApplicationArea`
+        where PAA_ApplicationAreaID = ApplicationAreaID
+          and PAA_ProjectID = #{projectID};
+    </select>
+    <select id="getOSInfo" resultType="com.waveshare.miaochuu.bean.OS">
+        select OSName, imgUUID
+        from OS,
+             `Project&amp;OS`
+        where PO_OSID = OSID
+          and PO_ProjectID = #{projectID};
+    </select>
+    <select id="getFrameworkInfo" resultType="com.waveshare.miaochuu.bean.Framework">
+        select FrameworkName
+        from `Project&amp;Framework`,Project
+        where PFW_FrameworkID=FrameworkID and PFW_ProjectID=#{projectID};
+    </select>
 </mapper>

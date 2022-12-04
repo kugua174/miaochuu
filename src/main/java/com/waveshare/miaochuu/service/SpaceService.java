@@ -6,6 +6,7 @@ import com.waveshare.miaochuu.bean.Favorite;
 import com.waveshare.miaochuu.bean.home.ProjectInfo;
 import com.waveshare.miaochuu.bean.space.ClassifyInfoWithProjectInfo;
 import com.waveshare.miaochuu.bean.space.ProjectInfoForClassify;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 public interface SpaceService {
@@ -26,7 +27,7 @@ public interface SpaceService {
     Favorite[] favorites(int userID);
 
     ProjectInfo[] getProjectsInFavorite(int favoriteID);
-
+    Boolean addFavorite(int userID, String favoriteName);
     Boolean addClassify(int userID, String classifyName);
 
     Boolean setClassify(int projectID, int classifyID);
@@ -39,6 +40,6 @@ public interface SpaceService {
 
     Boolean addFork(int projectID, String forkName);
 
-    Boolean addVersion(int forkID, int userID, String documentUUID, int versionNum, String pushIntroduce, String videoTitle, String videoUUID, String coverUUID);
+    Boolean addVersion(int forkID, Integer userID, String documentUUID, String versionNum, String pushIntroduce, String videoTitle, String videoUUID, String coverUUID);
 
 }

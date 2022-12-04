@@ -13,9 +13,9 @@ public interface MessageMapper {
 
     User[] getUsers(int userID);
 
-    Message[] getPush(int userID, int targetUserID);
+    Message[] getMessage(int userID, int targetUserID);
 
     int updateAgreeOrNot(int versionID, int isAgree);
 
-    int add(int content, int userID, int targetUserID);
+    int add(String content, String date, int userID, int targetUserID);
 }

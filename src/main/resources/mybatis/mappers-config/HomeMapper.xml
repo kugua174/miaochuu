@@ -124,7 +124,7 @@
                             and isagree = 1) od
                     group by userid) t
               where od.versionid = t.vid) mm
-        where mm.userid >= (select floor(rand() * max(userid)) from user);
+        where mm.userid >= (select floor(rand() * max(userid)) from user) limit 7;
     </select>
     <select id="getWorksByTag"></select>
     <select id="getWorksByKeyWords" resultMap="ProjectInfoMap">

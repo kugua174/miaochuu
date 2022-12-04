@@ -65,17 +65,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Boolean favorite(int projectID, int favoriteID) {
-        return projectMapper.insertProjectInFavorite(projectID,favoriteID)==1;
+        return projectMapper.insertProjectInFavorite(favoriteID,projectID)==1;
     }
 
     @Override
-    public Boolean addComment(int userID, String content, int projectID, int activityID, int replyCommentID, int floorCommentID) {
+    public Boolean addComment(int userID, String content, Integer projectID, Integer activityID, Integer replyCommentID, Integer floorCommentID) {
         String date = simpleDateFormat.format(System.currentTimeMillis()).toString();
         return projectMapper.addComment(userID,content,date,projectID,activityID,replyCommentID,floorCommentID)==1;
     }
 
     @Override
-    public Boolean addBulletComment(int content, String sendTime, int userID, int versionID) {
+    public Boolean addBulletComment(String content, String sendTime, int userID, int versionID) {
         String date = simpleDateFormat.format(System.currentTimeMillis()).toString();
         return projectMapper.addBulletComment(content,date, sendTime,versionID,userID)==1;
     }

@@ -3,20 +3,159 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.waveshare.miaochuu.mapper.SpaceMapper">
-    <insert id="addClassify"></insert>
-    <insert id="addFork"></insert>
-    <insert id="addVersion"></insert>
-    <update id="setClassify"></update>
-    <update id="updateProject"></update>
-    <update id="updateVersion"></update>
-    <update id="updateDescription"></update>
+    <resultMap id="ProjectInfoMap" type="com.waveshare.miaochuu.bean.home.ProjectInfo">
+        <result property="projectID" column="projectid"></result>
+        <result property="userName" column="username"></result>
+        <result property="userID" column="userid"></result>
+        <result property="chuNum" column="chunum"></result>
+        <result property="clickNum" column="clicknum"></result>
+        <result property="content" column="content"></result>
+        <result property="idea" column="idea"></result>
+        <result property="imageUUID" column="imageuuid"></result>
+        <result property="progress" column="progress"></result>
+        <result property="projectName" column="projectname"></result>
+        <result property="versionDate" column="versiondate"></result>
+        <result property="versionID" column="versionid"></result>
+        <result property="videoCoverUUID" column="videocoveruuid"></result>
+        <result property="videoUUID" column="videouuid"></result>
+    </resultMap>
+    <select id="getPinned" resultMap="ProjectInfoMap">
+        select projectid,
+               versionid,
+               videocoveruuid,
+               videouuid,
+               Content,
+               idea,
+               imageuuid,
+               projectname,
+               progress,
+               username,
+               userid,
+               versiondate,
+               clicknum,
+               chunum
+        from user,
+             project,
+             version,
+             fork,
+             DescriptionUnit
+        where userid = project_userid
+          and fork_projectid = projectid
+          and version_forkid = forkid
+          and describeunit_versionid = versionid
+          and ismain = 1
+          and SerialNum = 1
+          and isagree = 1
+          and ispin = 1
+          and userid = #{userID};
+    </select>
+    <select id="getClassifyInfoWithProjectInfo"
+            resultType="com.waveshare.miaochuu.bean.space.ClassifyInfoWithProjectInfo">
 
-    <select id="getPinned"></select>
-    <select id="getClassifyInfoWithProjectInfo"></select>
+    </select>
     <select id="getFavorites"></select>
-    <select id="getProjects"></select>
+    <select id="getProjects" resultMap="ProjectInfoMap">
+        select projectid,
+               versionid,
+               videocoveruuid,
+               videouuid,
+               Content,
+               idea,
+               imageuuid,
+               projectname,
+               progress,
+               username,
+               userid,
+               versiondate,
+               clicknum,
+               chunum
+        from user,
+             project,
+             version,
+             fork,
+             DescriptionUnit
+        where userid = project_userid
+          and fork_projectid = projectid
+          and version_forkid = forkid
+          and describeunit_versionid = versionid
+          and ismain = 1
+          and SerialNum = 1
+          and isagree = 1
+          and userid = #{userID};
+    </select>
     <select id="getActivities"></select>
-    <select id="getProjectsInFavorite"></select>
-    <select id="getClassifyInfo"></select>
-    <select id="getProjectInfoForClassify"></select>
+    <select id="getProjectsInFavorite" resultMap="ProjectInfoMap">
+        select projectid,
+               idea,
+               versionid,
+               projectname,
+               progress,
+               username,
+               userid,
+               versiondate,
+               clicknum,
+               chunum
+        from user,
+             project,
+             version,
+             fork,
+             `Favorite&amp;Project`
+        where userid = project_userid
+          and fork_projectid = projectid
+          and version_forkid = forkid
+          and ismain = 1
+          and isagree = 1
+          and FP_ProjectID = ProjectID
+          and FP_FavoriteID = #{favoriteID}
+    </select>
+    <select id="getClassifyInfo" resultType="com.waveshare.miaochuu.bean.Classify">
+        select *
+        from Classify
+        where Classify_UserID = #{userID};
+    </select>
+    <select id="getProjectInfoForClassify" resultType="com.waveshare.miaochuu.bean.space.ProjectInfoForClassify">
+        select ProjectID, ProjectName, ClickNum, ChuNum
+        from project,
+             `Project&amp;Classify`
+        where PC_ProjectID = ProjectID
+          and PC_ClassifyID = #{classifyID};
+    </select>
+    <insert id="addClassify">
+        insert into Classify(ClassifyName, Classify_UserID) value (#{classifyName},#{userID});
+    </insert>
+    <insert id="addFavorite">
+        insert into Favorite(FavoriteName, Favorite_UserID) value (#{favoriteName},#{userID});
+    </insert>
+    <insert id="addFork">
+        insert into Fork(Fork_ProjectID, ForkName) value (#{projectID},#{forkName});
+    </insert>
+    <insert id="addVersion">
+        insert into Version(DocumentUUID, VersionDate, VersionNum, PushIntroduce, VideoTittle, VideoUUID,
+                            VideoCoverUUID,
+                            Version_ForkID,
+                            Version_UserID) value (#{documentUUID},#{date},#{versionNum},#{pushIntroduce},#{videoTitle},#{videoUUID},#{coverUUID},#{forkID},#{userID});
+    </insert>
+    <update id="setClassify">
+        insert into `Project&amp;Classify`(PC_ProjectID, PC_ClassifyID) value (#{projectID},#{classifyID});
+    </update>
+    <update id="updateProject">
+        update Project
+        set ProjectName=#{projectName},
+            IsOpen=#{isOpen},
+            Progress=#{progress},
+            Idea=#{idea},
+            VideoCollection=#{videoCollection}
+        where ProjectID = #{projectID};
+    </update>
+    <update id="updateVersion">
+        update Version
+        set VideoTittle=#{videoTitle}
+        where versionid = #{versionID};
+    </update>
+    <update id="updateDescription">
+        update DescriptionUnit
+        set Content=#{content}
+        where SerialNum = #{serialNum}
+          and DescriptionUnitID = #{DescriptionUnitID};
+    </update>
 </mapper>

@@ -26,9 +26,9 @@ public interface ProjectMapper {
 
     int insertFollowInfo(int userID, int targetUserID);
 
-    int insertProjectInFavorite( int projectID ,int favoriteID);
-    int addComment(int userID, String content, String CommentDate,int projectID, int activityID, int replyCommentID, int floorCommentID);
+    int insertProjectInFavorite( int favoriteID ,int projectID);
+    int addComment(int userID, String content, String CommentDate,Integer projectID, Integer activityID, Integer replyCommentID, Integer floorCommentID);
 
-    int addBulletComment(int content,String data, String sendTime, int versionID, int userID);
+    int addBulletComment(String content,String date, String sendTime, int versionID, int userID);
 
 }

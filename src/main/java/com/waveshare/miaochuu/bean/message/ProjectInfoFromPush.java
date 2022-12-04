@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProjectInfoFromPush {
     private int versionID;
-    private int versionNum;
+    private String versionNum;
     private String pushIntroduce;
     private int isCheck;
     private int isAgree;

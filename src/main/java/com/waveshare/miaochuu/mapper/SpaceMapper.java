@@ -7,6 +7,7 @@ import com.waveshare.miaochuu.bean.home.ProjectInfo;
 import com.waveshare.miaochuu.bean.space.ClassifyInfoWithProjectInfo;
 import com.waveshare.miaochuu.bean.space.ProjectInfoForClassify;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Mapper
 public interface SpaceMapper {
@@ -26,7 +27,7 @@ public interface SpaceMapper {
     Favorite[] getFavorites(int userID);
 
     ProjectInfo[] getProjectsInFavorite(int favoriteID);
-
+    int addFavorite(int userID, String favoriteName);
     int addClassify(int userID, String classifyName);
 
     int setClassify(int projectID, int classifyID);
@@ -39,6 +40,6 @@ public interface SpaceMapper {
 
     int addFork(int projectID, String forkName);
 
-    int addVersion(int forkID, int userID, String documentUUID, int versionNum, String pushIntroduce, String videoTitle, String videoUUID, String coverUUID);
+    int addVersion(int forkID, Integer userID,String date, String documentUUID, String versionNum, String pushIntroduce, String videoTitle, String videoUUID, String coverUUID);
 
 }

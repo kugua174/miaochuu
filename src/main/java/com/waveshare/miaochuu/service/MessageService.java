@@ -11,10 +11,10 @@ public interface MessageService {
 
     User[] getUsers(int userID);
 
-    Message[] getPush(int userID, int targetUserID);
+    Message[] getMessage(int userID, int targetUserID);
 
     Boolean agreeOrNot(int versionID, int isAgree);
 
-    Boolean add(int content, int userID, int targetUserID);
+    Boolean add(String content, int userID, int targetUserID);
 
 }

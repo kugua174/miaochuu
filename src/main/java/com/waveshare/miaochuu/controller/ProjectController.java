@@ -61,7 +61,7 @@ public class ProjectController {
     @RequestMapping("/follow")
     public Boolean follow(@RequestParam("userid") int userID,
                           @RequestParam("targetuserid") int targetUserID) {
-        return projectService.follow(userID,targetUserID);
+        return projectService.follow(userID, targetUserID);
     }
 
     @RequestMapping("/dir")
@@ -74,24 +74,28 @@ public class ProjectController {
     @RequestMapping("/favorite")
     public Boolean favorite(@RequestParam("projectid") int projectID,
                             @RequestParam("favoriteid") int favoriteID) {
-        return projectService.favorite(projectID,favoriteID);
+        return projectService.favorite(projectID, favoriteID);
     }
 
     @RequestMapping("/addcomment")
     public Boolean addComment(@RequestParam("userid") int userID,
                               @RequestParam("content") String content,
-                              @RequestParam("projectid") int projectID,
-                              @RequestParam("activityid") int activityID,
-                              @RequestParam("replycommentid") int replyCommentID,
-                              @RequestParam("floorcommentid") int floorCommentID) {
-        return projectService.addComment(userID,content,projectID,activityID,replyCommentID,floorCommentID);
+                              @RequestParam("projectid") Integer projectID,
+                              @RequestParam("activityid") Integer activityID,
+                              @RequestParam("replycommentid") Integer replyCommentID,
+                              @RequestParam("floorcommentid") Integer floorCommentID) {
+        if (projectID == -1) projectID = null;
+        if (activityID == -1) activityID = null;
+        if (replyCommentID == -1) replyCommentID = null;
+        if (floorCommentID==-1)floorCommentID=null;
+        return projectService.addComment(userID, content, projectID, activityID, replyCommentID, floorCommentID);
     }
 
     @RequestMapping("/addbulletcomment")
-    public Boolean addBulletComment(@RequestParam("content") int content,
+    public Boolean addBulletComment(@RequestParam("content") String content,
                                     @RequestParam("sendtime") String sendTime,
                                     @RequestParam("userid") int userID,
                                     @RequestParam("versionid") int versionID) {
-        return projectService.addBulletComment(content,sendTime,userID,versionID);
+        return projectService.addBulletComment(content, sendTime, userID, versionID);
     }
 }
