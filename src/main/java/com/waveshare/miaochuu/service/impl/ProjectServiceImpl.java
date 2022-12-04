@@ -4,22 +4,28 @@ import com.waveshare.miaochuu.bean.*;
 import com.waveshare.miaochuu.bean.project.FloorCommentInfo;
 import com.waveshare.miaochuu.bean.project.TagInfo;
 import com.waveshare.miaochuu.bean.project.VersionInfoForList;
+import com.waveshare.miaochuu.mapper.ProjectMapper;
 import com.waveshare.miaochuu.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
 
 @Service
 @Transactional
 public class ProjectServiceImpl implements ProjectService {
-
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @Autowired
+    ProjectMapper projectMapper;
     @Override
     public Project getInfo(int projectID) {
-        return null;
+        return projectMapper.getInfo(projectID);
     }
 
     @Override
     public Version getVersionInfo(int versionID) {
-        return null;
+        return projectMapper.getVersionInfo(versionID);
     }
 
     @Override
@@ -29,22 +35,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public DescriptionUnit[] getDescriptionsInfo(int versionID) {
-        return new DescriptionUnit[0];
+        return projectMapper.getDescriptionsInfo(versionID);
     }
 
     @Override
     public Fork[] forks(int projectID) {
-        return new Fork[0];
+        return projectMapper.getForks(projectID);
     }
 
     @Override
     public VersionInfoForList versions(int forkID) {
-        return null;
+        return projectMapper.getVersions(forkID);
     }
 
     @Override
     public BulletComment[] bulletComments(int versionID) {
-        return new BulletComment[0];
+        return projectMapper.getBulletComments(versionID);
     }
 
     @Override
@@ -54,21 +60,23 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Boolean follow(int userID, int targetUserID) {
-        return null;
+        return projectMapper.insertFollowInfo(userID,targetUserID)==1;
     }
 
     @Override
     public Boolean favorite(int projectID, int favoriteID) {
-        return null;
+        return projectMapper.insertProjectInFavorite(projectID,favoriteID)==1;
     }
 
     @Override
     public Boolean addComment(int userID, String content, int projectID, int activityID, int replyCommentID, int floorCommentID) {
-        return null;
+        String date = simpleDateFormat.format(System.currentTimeMillis()).toString();
+        return projectMapper.addComment(userID,content,date,projectID,activityID,replyCommentID,floorCommentID)==1;
     }
 
     @Override
     public Boolean addBulletComment(int content, String sendTime, int userID, int versionID) {
-        return null;
+        String date = simpleDateFormat.format(System.currentTimeMillis()).toString();
+        return projectMapper.addBulletComment(content,date, sendTime,versionID,userID)==1;
     }
 }

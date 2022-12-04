@@ -3,17 +3,70 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.waveshare.miaochuu.mapper.ProjectMapper">
-    <insert id="insertFollowInfo"></insert>
-    <insert id="addComment"></insert>
-    <insert id="addBulletComment"></insert>
+    <resultMap id="ProjectMap" type="com.waveshare.miaochuu.bean.Project">
 
-    <select id="getInfo" resultType="com.waveshare.miaochuu.bean.Project"></select>
-    <select id="getVersionInfo" resultType="com.waveshare.miaochuu.bean.Version"></select>
-    <select id="getTagsInfo" resultType="com.waveshare.miaochuu.bean.project.TagInfo"></select>
-    <select id="getDescriptionsInfo"></select>
-    <select id="getForks"></select>
-    <select id="getVersions" resultType="com.waveshare.miaochuu.bean.project.VersionInfoForList"></select>
-    <select id="getBulletComments"></select>
-    <select id="getComments" resultType="com.waveshare.miaochuu.bean.project.FloorCommentInfo"></select>
-    <select id="getFavoriteProject" resultType="java.lang.Integer"></select>
+    </resultMap>
+    <resultMap id="TagInfoMap" type="com.waveshare.miaochuu.bean.project.TagInfo"></resultMap>
+    <resultMap id="VersionInfoForListMap" type="com.waveshare.miaochuu.bean.project.VersionInfoForList"></resultMap>
+    <resultMap id="BulletCommentsMap" type="com.waveshare.miaochuu.bean.BulletComment"></resultMap>
+    <resultMap id="CommentsMap" type="com.waveshare.miaochuu.bean.project.FloorCommentInfo"></resultMap>
+
+    <select id="getInfo" resultType="com.waveshare.miaochuu.bean.Project">
+        select *
+        from project
+        where projectid = #{projectID}
+          and isopen = 1;
+    </select>
+    <select id="getVersionInfo" resultType="com.waveshare.miaochuu.bean.Version">
+        select *
+        from version
+        where versionid = #{versionID};
+    </select>
+    <select id="getTagsInfo" resultMap="TagInfoMap">
+
+
+    </select>
+    <select id="getDescriptionsInfo" resultType="com.waveshare.miaochuu.bean.DescriptionUnit">
+        select *
+        from descriptionunit
+        where DescribeUnit_VersionID = #{versionID}
+        order by SerialNum;
+    </select>
+    <select id="getForks" resultType="com.waveshare.miaochuu.bean.Fork">
+        select ForkID, ForkName
+        from fork
+        where Fork_ProjectID = #{projectID};
+    </select>
+    <select id="getVersions" resultMap="VersionInfoForListMap">
+        select VersionID, VersionDate, VersionNum, VideoTitle, UserID, UserName, AvatarUUID
+        from user,
+             version,
+             fork
+        where userid = version_userid
+          and version_forkid = forkid
+          and forkid = #{forkID}
+          and isagree = 1;
+    </select>
+    <select id="getBulletComments" resultType="com.waveshare.miaochuu.bean.BulletComment">
+        select *
+        from BulletComment
+        where BulletComment_VersionID=#{versionID};
+    </select>
+    <select id="getComments" resultMap="CommentsMap">
+
+
+    </select>
+    <insert id="insertFollowInfo">
+        insert into `Followed&amp;Follewer`(FollowedUserID, FollewerUserID) value (#{userID},#{targetUserID});
+    </insert>
+    <insert id="addComment">
+        insert into comment(Content, CommentDate, Comment_ProjectID, Comment_ActivityID, Reply_CommentID,
+                            Floor_CommentID, Comment_UserID) value(content,CommentDate,projectID,activityID,replyCommentID,floorCommentID,userID);
+    </insert>
+    <insert id="addBulletComment">
+        insert into BulletComment(content, data, sendtime, BulletComment_VersionID, BulletComment_UserID) value(content,data,sendTime,versionID,userID);
+    </insert>
+    <insert id="insertProjectInFavorite">
+        insert into `favorite&amp;project`(favoriteid, fp_projectid) value(projectID,favoriteID);
+    </insert>
 </mapper>

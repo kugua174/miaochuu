@@ -74,7 +74,7 @@ public class HomeController {
     }
 
     @RequestMapping("/getworksbykeywords")
-    public ProjectInfo[] getWorksKeyWords(@RequestParam("Keywords") String keywords) {
+    public ProjectInfo[] getWorksKeyWords(@RequestParam("keywords") String keywords) {
         return homeService.getWorksKeyWords(keywords);
     }
 
@@ -89,8 +89,18 @@ public class HomeController {
     }
 
     @RequestMapping("/logout")
-    public Boolean logOut() {
-        return null;
+    public Boolean logOut(@RequestParam("useremail") String userEmail, HttpServletResponse response) {
+        Cookie cookieForEmail = new Cookie("useremail", userEmail);
+        cookieForEmail.setDomain("localhost");
+        cookieForEmail.setMaxAge(0);
+        cookieForEmail.setPath("/");
+        Cookie cookieForPWD = new Cookie("userpwd", "0");
+        cookieForPWD.setDomain("localhost");
+        cookieForPWD.setMaxAge(0);
+        cookieForPWD.setPath("/");
+        response.addCookie(cookieForEmail);
+        response.addCookie(cookieForPWD);
+        return true;
     }
 
     @RequestMapping("/createproject")

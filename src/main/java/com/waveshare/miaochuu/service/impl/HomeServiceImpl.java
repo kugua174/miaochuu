@@ -66,6 +66,7 @@ public class HomeServiceImpl implements HomeService {
         return homeMapper.insertSignInInfo(userName, userPWD, userEmail) == 1;
     }
 
+    @Transactional
     @Override
     public Boolean createProject(int userID, String idea, int[] applicationAreaID, int[] frameworkID,
                                  int[] osID, String projectName, String activityDescription, int isOpen, String imgUUID) {
@@ -78,13 +79,12 @@ public class HomeServiceImpl implements HomeService {
         count += homeMapper.insertProjectAndFramework(project.getProjectID(), frameworkID);
         count += homeMapper.insertProjectAndApplicationArea(project.getProjectID(), applicationAreaID);
         count += homeMapper.insertActivity(activityDescription, imgUUID, createDate, project.getProjectID());
-        int needCount=2+applicationAreaID.length+frameworkID.length+osID.length;
-        if(count!=needCount){
-            log.info("用户:"+userID+" 创建项目失败");
-            TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
-//            throw new RuntimeException("用户:"+userID+" 创建项目失败");
+        if(count!=5){
+            log.info("用户:"+userID+" 创建项目失败;"+" count:"+count);
+//            TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
+            throw new RuntimeException("用户:"+userID+" 创建项目失败");
         }
-        return count == needCount;
+        return count == 5;
     }
 
 

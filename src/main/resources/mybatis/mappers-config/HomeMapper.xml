@@ -155,7 +155,7 @@
                 and ismain = 1
                 and SerialNum = 1
                 and isagree = 1
-                and projectname like concat('%', #{Keywords}, '%')) od,
+                and content like concat('%', #{Keywords}, '%')) od,
              (select max(od.versionid) vid
               from (select projectid,
                            versionid,
@@ -183,7 +183,7 @@
                       and ismain = 1
                       and SerialNum = 1
                       and isagree = 1
-                      and projectname like concat('%', #{Keywords}, '%')) od
+                      and content like concat('%', #{Keywords}, '%')) od
               group by userid) t
         where od.versionid = t.vid;
     </select>
@@ -212,19 +212,19 @@
         insert into project(projectname, idea, isopen, CreationDate, project_userid) value (#{projectName},#{idea},#{isOpen},#{creationDate},#{user.userID});
     </insert>
     <insert id="insertProjectAndApplicationArea">
-        <foreach collection="PAA_ApplicationAreaID" item="aaID">
-            insert into project&amp;applicationarea(PAA_ProjectID, PAA_ApplicationAreaID) value
-            (#{PAA_ProjectID},#{aaid});
+        <foreach collection="PAA_ApplicationAreaID" item="aaID" separator=";">
+            insert into `project&amp;applicationarea`(PAA_ProjectID, PAA_ApplicationAreaID) value
+            (#{PAA_ProjectID},#{aaID})
         </foreach>
     </insert>
     <insert id="insertProjectAndOS">
-        <foreach collection="PO_osID" item="osID">
-            insert into project&amp;os(po_projectid, po_osid) value (#{PO_ProjectID}, #{osID});
+        <foreach collection="PO_osID" item="osID" separator=";">
+            insert into `project&amp;os`(po_projectid, po_osid) value (#{PO_ProjectID}, #{osID})
         </foreach>
     </insert>
     <insert id="insertProjectAndFramework">
-        <foreach collection="PFW_FrameworkID" item="FWid">
-            insert into project&amp;framework(pfw_projectid, pfw_frameworkid) value (#{PFW_ProjectID}, #{FWid});
+        <foreach collection="PFW_FrameworkID" item="FWid" separator=";">
+            insert into `project&amp;framework`(pfw_projectid, pfw_frameworkid) value (#{PFW_ProjectID}, #{FWid})
         </foreach>
     </insert>
     <insert id="insertActivity">
