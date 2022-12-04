@@ -6,8 +6,10 @@ import com.waveshare.miaochuu.bean.project.TagInfo;
 import com.waveshare.miaochuu.bean.project.VersionInfoForList;
 import com.waveshare.miaochuu.service.ProjectService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ProjectServiceImpl implements ProjectService {
 
     @Override

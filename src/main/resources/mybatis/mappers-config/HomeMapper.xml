@@ -3,15 +3,233 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.waveshare.miaochuu.mapper.HomeMapper">
-    <insert id="insertSignInInfo"></insert>
-    <insert id="createProject"></insert>
-
-    <select id="getLoginInfo" resultType="com.waveshare.miaochuu.bean.User"></select>
-    <select id="getWorks"></select>
+    <resultMap id="UserMap" type="com.waveshare.miaochuu.bean.User">
+        <id property="userID" column="userid"></id>
+        <result property="userName" column="username"></result>
+        <result property="userEmail" column="useremail"></result>
+        <result property="avatarUUID" column="avataruuid"></result>
+        <result property="stateMassage" column="statemessage"></result>
+        <result property="exp" column="exp"></result>
+        <association property="level" javaType="com.waveshare.miaochuu.bean.Level">
+            <result property="levelNum" column="levelnum"></result>
+            <result property="needEXP" column="needexp"></result>
+            <result property="rbg" column="rgb"></result>
+        </association>
+    </resultMap>
+    <resultMap id="ProjectInfoMap" type="com.waveshare.miaochuu.bean.home.ProjectInfo">
+        <result property="projectID" column="projectid"></result>
+        <result property="userName" column="username"></result>
+        <result property="userID" column="userid"></result>
+        <result property="chuNum" column="chunum"></result>
+        <result property="clickNum" column="clicknum"></result>
+        <result property="content" column="content"></result>
+        <result property="idea" column="idea"></result>
+        <result property="imageUUID" column="imageuuid"></result>
+        <result property="progress" column="progress"></result>
+        <result property="projectName" column="projectname"></result>
+        <result property="versionDate" column="versiondate"></result>
+        <result property="versionID" column="versionid"></result>
+        <result property="videoCoverUUID" column="videocoveruuid"></result>
+        <result property="videoUUID" column="videouuid"></result>
+    </resultMap>
+    <resultMap id="ApplicationAreaMap" type="com.waveshare.miaochuu.bean.ApplicationArea">
+        <result property="applicationAreaID" column="applicationareaid"></result>
+        <result property="applicationAreaName" column="applicationareaname"></result>
+    </resultMap>
+    <resultMap id="OSMap" type="com.waveshare.miaochuu.bean.OS">
+        <id property="osID" column="osid"></id>
+        <result property="osName" column="osname"></result>
+        <result property="logoUUID" column="logouuid"></result>
+    </resultMap>
+    <resultMap id="FrameworkMap" type="com.waveshare.miaochuu.bean.Framework">
+        <result property="frameworkID" column="frameworkid"></result>
+        <result property="frameworkName" column="frameworkname"></result>
+    </resultMap>
+    <resultMap id="PLMap" type="com.waveshare.miaochuu.bean.PL">
+        <id property="plID" column="plid"></id>
+        <result property="plName" column="plname"></result>
+        <result property="logoUUID" column="logouuid"></result>
+    </resultMap>
+    <select id="getLoginInfo" resultMap="UserMap">
+        select userid,
+               username,
+               useremail,
+               avataruuid,
+               statemassage,
+               exp,
+               levelnum,
+               needexp,
+               rgb
+        from user,
+             level
+        where useremail = #{userEmail}
+          and userpwd = #{userPWD}
+          and user_levelid = levelID;
+    </select>
+    <select id="getWorks" resultMap="ProjectInfoMap">
+        select *
+        from (select *
+              from (select projectid,
+                           versionid,
+                           videocoveruuid,
+                           videouuid,
+                           Content,
+                           idea,
+                           imageuuid,
+                           projectname,
+                           progress,
+                           username,
+                           userid,
+                           versiondate,
+                           clicknum,
+                           chunum
+                    from user,
+                         project,
+                         version,
+                         fork,
+                         DescriptionUnit
+                    where userid = project_userid
+                      and fork_projectid = projectid
+                      and version_forkid = forkid
+                      and describeunit_versionid = versionid
+                      and ismain = 1
+                      and SerialNum = 1
+                      and isagree = 1) od,
+                   (select max(od.versionid) vid
+                    from (select projectid,
+                                 versionid,
+                                 videocoveruuid,
+                                 videouuid,
+                                 Content,
+                                 idea,
+                                 imageuuid,
+                                 projectname,
+                                 progress,
+                                 username,
+                                 userid,
+                                 versiondate,
+                                 clicknum,
+                                 chunum
+                          from user,
+                               project,
+                               version,
+                               fork,
+                               DescriptionUnit
+                          where userid = project_userid
+                            and fork_projectid = projectid
+                            and version_forkid = forkid
+                            and describeunit_versionid = versionid
+                            and ismain = 1
+                            and SerialNum = 1
+                            and isagree = 1) od
+                    group by userid) t
+              where od.versionid = t.vid) mm
+        where mm.userid >= (select floor(rand() * max(userid)) from user);
+    </select>
     <select id="getWorksByTag"></select>
-    <select id="getWorksByKeyWords"></select>
-    <select id="getAATags"></select>
-    <select id="getPLTags"></select>
-    <select id="getOSTags"></select>
-    <select id="getFrameworkTags"></select>
+    <select id="getWorksByKeyWords" resultMap="ProjectInfoMap">
+        select *
+        from (select projectid,
+                     versionid,
+                     videocoveruuid,
+                     videouuid,
+                     Content,
+                     idea,
+                     imageuuid,
+                     projectname,
+                     progress,
+                     username,
+                     userid,
+                     versiondate,
+                     clicknum,
+                     chunum
+              from user,
+                   project,
+                   version,
+                   fork,
+                   DescriptionUnit
+              where userid = project_userid
+                and fork_projectid = projectid
+                and version_forkid = forkid
+                and describeunit_versionid = versionid
+                and ismain = 1
+                and SerialNum = 1
+                and isagree = 1
+                and projectname like concat('%', #{Keywords}, '%')) od,
+             (select max(od.versionid) vid
+              from (select projectid,
+                           versionid,
+                           videocoveruuid,
+                           videouuid,
+                           Content,
+                           idea,
+                           imageuuid,
+                           projectname,
+                           progress,
+                           username,
+                           userid,
+                           versiondate,
+                           clicknum,
+                           chunum
+                    from user,
+                         project,
+                         version,
+                         fork,
+                         DescriptionUnit
+                    where userid = project_userid
+                      and fork_projectid = projectid
+                      and version_forkid = forkid
+                      and describeunit_versionid = versionid
+                      and ismain = 1
+                      and SerialNum = 1
+                      and isagree = 1
+                      and projectname like concat('%', #{Keywords}, '%')) od
+              group by userid) t
+        where od.versionid = t.vid;
+    </select>
+    <select id="getAATags" resultMap="ApplicationAreaMap">
+        select *
+        from applicationarea;
+    </select>
+    <select id="getPLTags" resultMap="PLMap">
+        select *
+        from pl;
+    </select>
+    <select id="getOSTags" resultMap="OSMap">
+        select *
+        from os;
+    </select>
+    <select id="getFrameworkTags" resultMap="FrameworkMap">
+        select framework.*
+        from framework
+        where framework_plid = #{plID};
+    </select>
+    <insert id="insertSignInInfo">
+        insert into user(username, userpwd, useremail, user_levelid) value (#{userName},#{userPWD},#{userEmail},1);
+    </insert>
+    <insert id="insertProjectInfo" parameterType="com.waveshare.miaochuu.bean.Project" useGeneratedKeys="true"
+            keyProperty="projectID">
+        insert into project(projectname, idea, isopen, CreationDate, project_userid) value (#{projectName},#{idea},#{isOpen},#{creationDate},#{user.userID});
+    </insert>
+    <insert id="insertProjectAndApplicationArea">
+        <foreach collection="PAA_ApplicationAreaID" item="aaID">
+            insert into project&amp;applicationarea(PAA_ProjectID, PAA_ApplicationAreaID) value
+            (#{PAA_ProjectID},#{aaid});
+        </foreach>
+    </insert>
+    <insert id="insertProjectAndOS">
+        <foreach collection="PO_osID" item="osID">
+            insert into project&amp;os(po_projectid, po_osid) value (#{PO_ProjectID}, #{osID});
+        </foreach>
+    </insert>
+    <insert id="insertProjectAndFramework">
+        <foreach collection="PFW_FrameworkID" item="FWid">
+            insert into project&amp;framework(pfw_projectid, pfw_frameworkid) value (#{PFW_ProjectID}, #{FWid});
+        </foreach>
+    </insert>
+    <insert id="insertActivity">
+        insert into Activity(ActivityDescription, ImageUUID, Date, Activity_ProjectID) value (#{ActivityDescription},#{ImageUUID},#{Date},#{Activity_ProjectID});
+    </insert>
+
+
 </mapper>

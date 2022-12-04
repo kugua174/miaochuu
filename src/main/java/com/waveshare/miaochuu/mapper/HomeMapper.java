@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface HomeMapper {
-    User getLoginInfo(int userID, String userPWD);
+    User getLoginInfo(String userEmail, String userPWD);
 
     ProjectInfo[] getWorks();
 
@@ -16,7 +16,7 @@ public interface HomeMapper {
 
     OS[] getOSTags();
 
-    Framework[] getFrameworkTags();
+    Framework[] getFrameworkTags(int plID);
 
     ProjectInfo[] getWorksByTag(Integer[] AATagIDs, Integer[] OSTagIDs, Integer[] frameworkIDs);
 
@@ -24,6 +24,13 @@ public interface HomeMapper {
 
     int insertSignInInfo(String userName, String userPWD, String userEmail);
 
-    int createProject(String idea, int applicationAreaID, int frameworkID, int osID, String projectName);
+    int insertProjectInfo(Project project);
 
+    int insertProjectAndApplicationArea(int PAA_ProjectID, int[] PAA_ApplicationAreaID);
+
+    int insertProjectAndOS(int PO_ProjectID, int[] PO_osID);
+
+    int insertProjectAndFramework(int PFW_ProjectID, int[] PFW_FrameworkID);
+
+    int insertActivity(String ActivityDescription, String ImageUUID, String Date, int Activity_ProjectID);
 }

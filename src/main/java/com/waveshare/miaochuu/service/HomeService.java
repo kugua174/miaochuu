@@ -4,7 +4,7 @@ import com.waveshare.miaochuu.bean.*;
 import com.waveshare.miaochuu.bean.home.ProjectInfo;
 
 public interface HomeService {
-    User login(int userID, String userPWD);
+    User login(String userEmail, String userPWD);
 
     ProjectInfo[] getWorks();
 
@@ -14,7 +14,7 @@ public interface HomeService {
 
     OS[] getOSTags();
 
-    Framework[] getFrameworkTags();
+    Framework[] getFrameworkTags(int plID);
 
     ProjectInfo[] getWorksByTag(Integer[] AATagIDs, Integer[] OSTagIDs, Integer[] frameworkIDs);
 
@@ -22,7 +22,7 @@ public interface HomeService {
 
     Boolean signIn(String userName, String userPWD, String userEmail);
 
-    Boolean createProject(String idea, int applicationAreaID, int frameworkID, int osID, String projectName);
+    Boolean createProject(int userID,String idea, int[] applicationAreaID, int[] frameworkID, int[] osID, String projectName, String ActivityDescription, int isOpen,String imageUUID);
 
     ;;;
 

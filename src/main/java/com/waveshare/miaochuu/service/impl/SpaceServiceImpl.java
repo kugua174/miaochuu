@@ -8,8 +8,10 @@ import com.waveshare.miaochuu.bean.space.ClassifyInfoWithProjectInfo;
 import com.waveshare.miaochuu.bean.space.ProjectInfoForClassify;
 import com.waveshare.miaochuu.service.SpaceService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class SpaceServiceImpl implements SpaceService {
     @Override
     public ProjectInfo[] getPinned(int userID) {
