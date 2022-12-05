@@ -16,7 +16,7 @@ public interface ProjectService {
 
     Fork[] forks(int projectID);
 
-    VersionInfoForList versions(int forkID);
+    VersionInfoForList[] versions(int forkID);
 
     BulletComment[] bulletComments(int versionID);
 

@@ -44,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public VersionInfoForList versions(int forkID) {
+    public VersionInfoForList[] versions(int forkID) {
         return projectMapper.getVersions(forkID);
     }
 

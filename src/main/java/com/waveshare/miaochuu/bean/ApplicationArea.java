@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ApplicationArea {
     private int applicationAreaID;
     private String applicationAreaName;
+    private String logoUUID;
 }

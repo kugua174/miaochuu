@@ -18,7 +18,7 @@ public interface ProjectMapper {
 
     Fork[] getForks(int projectID);
 
-    VersionInfoForList getVersions(int forkID);
+    VersionInfoForList[] getVersions(int forkID);
 
     BulletComment[] getBulletComments(int versionID);
 

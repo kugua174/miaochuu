@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -21,6 +23,26 @@ import java.util.UUID;
 public class SpaceController {
     @Autowired
     SpaceService spaceService;
+    private static String mainPath;
+    private static String projectPath;
+    private static String videoPath;
+    private static String imagePath;
+
+    private static File mainDir;
+    private static File projectDir;
+    private static File videoDir;
+    private static File imageDir;
+
+    static {
+        mainPath = System.getProperty("user.dir") + "/static/";
+        projectPath = mainPath + "project/";
+        videoPath = mainPath + "video/";
+        imagePath = mainPath + "image/";
+        mainDir = new File(mainPath);
+        projectDir = new File(projectPath);
+        videoDir = new File(videoPath);
+        imageDir = new File(imagePath);
+    }
 
     //加载时
     @RequestMapping("/home/pinned")
@@ -98,7 +120,19 @@ public class SpaceController {
                                  @RequestParam("videouuid") String videoUUID,
                                  @RequestParam("videocoveruuid") String videoCoverUUID,
                                  @RequestPart("video") MultipartFile video,
-                                 @RequestPart("videocover") MultipartFile videoCover) {
+                                 @RequestPart("videocover") MultipartFile videoCover) throws IOException {
+        if (!video.isEmpty()) {
+            if (!videoDir.exists()) {
+                videoDir.mkdirs();
+            }
+            video.transferTo(new File(videoPath + videoUUID + ".mp4"));
+        }
+        if (!videoCover.isEmpty()) {
+            if (!imageDir.exists()) {
+                imageDir.mkdirs();
+            }
+            videoCover.transferTo(new File(imagePath + videoCoverUUID + "." + videoCover.getContentType().split("/", 2)[1]));
+        }
         return spaceService.updateVersion(versionID, videoTitle);
     }
 
@@ -108,7 +142,13 @@ public class SpaceController {
                                      @RequestParam("content") String content,
                                      @RequestParam("imageuuid") String imageUUID,
                                      @RequestPart("img") MultipartFile img,
-                                     @RequestParam("serialnum") int serialNum) {
+                                     @RequestParam("serialnum") int serialNum) throws IOException {
+        if (!img.isEmpty()) {
+            if (!imageDir.exists()) {
+                imageDir.mkdirs();
+            }
+            img.transferTo(new File(imagePath + imageUUID + "." + img.getContentType().split("/", 2)[1]));
+        }
         return spaceService.updateDescription(descriptionUnitID, content, serialNum);
     }
 
@@ -126,21 +166,38 @@ public class SpaceController {
                               @RequestParam("pushintroduce") String pushIntroduce,
                               @RequestParam("videotitle") String videoTitle,
                               @RequestPart("video") MultipartFile video,
-                              @RequestPart("cover") MultipartFile cover) {
+                              @RequestPart("cover") MultipartFile cover) throws IOException {
         String documentUUID = null;
         String videoUUID = null;
         String coverUUID = null;
-        if(userID==-1)userID=null;
-        if (document != null) {
+        if (userID == -1) userID = null;
+        if (document.length > 0) {
             documentUUID = UUID.randomUUID().toString();
+            for (MultipartFile file : document) {
+                if (!file.isEmpty()) {
+                    File dirn = new File(projectPath + documentUUID + "/" + file.getOriginalFilename());
+                    if (!dirn.exists()) {
+                        dirn.mkdirs();
+                    }
+                    file.transferTo(new File(projectPath + documentUUID + "/" + file.getOriginalFilename()));
+                }
+            }
         }
-        if (video != null) {
+        if (!video.isEmpty()) {
             videoUUID = UUID.randomUUID().toString();
+            if (!videoDir.exists()) {
+                videoDir.mkdirs();
+            }
+            video.transferTo(new File(videoPath + videoUUID + ".mp4"));
         }
-        if (cover != null) {
+        if (!cover.isEmpty()) {
             coverUUID = UUID.randomUUID().toString();
+            if (!imageDir.exists()) {
+                imageDir.mkdirs();
+            }
+            cover.transferTo(new File(imagePath + coverUUID + "." + cover.getContentType().split("/", 2)[1]));
         }
-            return spaceService.addVersion(forkID, userID, documentUUID, versionNum, pushIntroduce, videoTitle, videoUUID, coverUUID);
+        return spaceService.addVersion(forkID, userID, documentUUID, versionNum, pushIntroduce, videoTitle, videoUUID, coverUUID);
     }
 
 }

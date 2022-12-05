@@ -43,7 +43,7 @@ public class ProjectController {
     }
 
     @RequestMapping("/versions")
-    public VersionInfoForList versions(@RequestParam("forkid") int forkID) {
+    public VersionInfoForList[] versions(@RequestParam("forkid") int forkID) {
         return projectService.versions(forkID);
     }
 

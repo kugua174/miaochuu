@@ -40,14 +40,25 @@
         where Fork_ProjectID = #{projectID};
     </select>
     <select id="getVersions" resultMap="VersionInfoForListMap">
-        select VersionID, VersionDate, VersionNum, VideoTitle, UserID, UserName, AvatarUUID
-        from user,
-             version,
-             fork
-        where userid = version_userid
-          and version_forkid = forkid
-          and forkid = #{forkID}
-          and isagree = 1;
+        select *
+        from (select VersionID, VersionDate, VersionNum, VideoTitle, UserID, UserName, AvatarUUID
+              from user,
+                   version,
+                   fork
+              where userid = version_userid
+                and version_forkid = forkid
+                and forkid = #{forkID}
+                and isagree = 1
+              union all
+              select VersionID, VersionDate, VersionNum, VideoTitle, UserID, UserName, AvatarUUID
+              from user,
+                   project,
+                   version,
+                   fork
+              where userid = project_userid
+                and Fork_ProjectID=ProjectID
+                and version_forkid = forkid
+                and forkid = #{forkID})a;
     </select>
     <select id="getBulletComments" resultType="com.waveshare.miaochuu.bean.BulletComment">
         select *
@@ -89,7 +100,9 @@
     </select>
     <select id="getFrameworkInfo" resultType="com.waveshare.miaochuu.bean.Framework">
         select FrameworkName
-        from `Project&amp;Framework`,Project
-        where PFW_FrameworkID=FrameworkID and PFW_ProjectID=#{projectID};
+        from `Project&amp;Framework`,
+             Project
+        where PFW_FrameworkID = FrameworkID
+          and PFW_ProjectID = #{projectID};
     </select>
 </mapper>
