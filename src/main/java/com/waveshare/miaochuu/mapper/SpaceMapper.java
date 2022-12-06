@@ -27,6 +27,7 @@ public interface SpaceMapper {
     Favorite[] getFavorites(int userID);
 
     ProjectInfo[] getProjectsInFavorite(int favoriteID);
+    int setPin(int projectID);
     int addFavorite(int userID, String favoriteName);
     int addClassify(int userID, String classifyName);
 

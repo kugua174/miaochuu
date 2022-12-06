@@ -28,6 +28,7 @@ public interface SpaceService {
 
     ProjectInfo[] getProjectsInFavorite(int favoriteID);
     Boolean addFavorite(int userID, String favoriteName);
+    boolean setPin(int projectID);
     Boolean addClassify(int userID, String classifyName);
 
     Boolean setClassify(int projectID, int classifyID);

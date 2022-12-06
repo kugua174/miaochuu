@@ -72,6 +72,11 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
+    public boolean setPin(int projectID) {
+        return spaceMapper.setPin(projectID) == 1;
+    }
+
+    @Override
     public Boolean addClassify(int userID, String classifyName) {
         return spaceMapper.addClassify(userID, classifyName) == 1;
     }
@@ -104,6 +109,6 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public Boolean addVersion(int forkID, Integer userID, String documentUUID, String versionNum, String pushIntroduce, String videoTitle, String videoUUID, String coverUUID) {
         String date = simpleDateFormat.format(System.currentTimeMillis()).toString();
-        return spaceMapper.addVersion(forkID,userID,date,documentUUID,versionNum,pushIntroduce,videoTitle,videoUUID,coverUUID)==1;
+        return spaceMapper.addVersion(forkID, userID, date, documentUUID, versionNum, pushIntroduce, videoTitle, videoUUID, coverUUID) == 1;
     }
 }

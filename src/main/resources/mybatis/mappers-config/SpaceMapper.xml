@@ -158,4 +158,7 @@
         where SerialNum = #{serialNum}
           and DescriptionUnitID = #{DescriptionUnitID};
     </update>
+    <update id="setPin">
+        update project set IsPin=1 where projectID=#{projectID} ;
+    </update>
 </mapper>
