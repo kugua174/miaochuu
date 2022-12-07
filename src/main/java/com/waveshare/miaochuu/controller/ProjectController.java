@@ -17,6 +17,10 @@ public class ProjectController {
     ProjectService projectService;
 
     //加载时
+    @RequestMapping("/getuserinfo")
+    public User getuserInfo(@RequestParam("userid") int userID){
+        return  projectService.getUserInfo(userID);
+    }
     @RequestMapping("/info")
     public Project getInfo(@RequestParam("projectid") int projectID) {
         return projectService.getInfo(projectID);

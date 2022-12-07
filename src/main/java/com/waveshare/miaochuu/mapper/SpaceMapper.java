@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Mapper
 public interface SpaceMapper {
+
     ProjectInfo[] getPinned(int userID);
 
     ClassifyInfoWithProjectInfo[] getClassifyInfoWithProjectInfo(int userID);

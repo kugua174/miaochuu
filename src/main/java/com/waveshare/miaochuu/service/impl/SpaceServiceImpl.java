@@ -21,6 +21,7 @@ public class SpaceServiceImpl implements SpaceService {
     @Autowired
     SpaceMapper spaceMapper;
 
+
     @Override
     public ProjectInfo[] getPinned(int userID) {
         return spaceMapper.getPinned(userID);

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class VersionInfoForList {
     private int VersionID;
     private String VersionDate;
-    private int VersionNum;
+    private String VersionNum;
     private String VideoTitle;
     private int UserID;
     private String UserName;

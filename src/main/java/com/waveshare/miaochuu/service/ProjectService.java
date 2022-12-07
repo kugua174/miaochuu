@@ -6,6 +6,7 @@ import com.waveshare.miaochuu.bean.project.TagInfo;
 import com.waveshare.miaochuu.bean.project.VersionInfoForList;
 
 public interface ProjectService {
+    User getUserInfo(int userID);
     Project getInfo(int projectID);
 
     Version getVersionInfo(int versionID);

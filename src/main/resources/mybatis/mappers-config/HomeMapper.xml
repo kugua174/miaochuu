@@ -82,7 +82,8 @@
                            userid,
                            versiondate,
                            clicknum,
-                           chunum
+                           chunum,
+                           forkID
                     from user,
                          project,
                          version,
@@ -109,7 +110,8 @@
                                  userid,
                                  versiondate,
                                  clicknum,
-                                 chunum
+                                 chunum,
+                                 forkID
                           from user,
                                project,
                                version,
@@ -149,13 +151,15 @@
                    fork,
                    DescriptionUnit
               where userid = project_userid
-                and fork_projectid = projectid
-                and version_forkid = forkid
-                and describeunit_versionid = versionid
-                and ismain = 1
-                and SerialNum = 1
-                and isagree = 1
-                and content like concat('%', #{Keywords}, '%')) od,
+                  and fork_projectid = projectid
+                  and version_forkid = forkid
+                  and describeunit_versionid = versionid
+                  and ismain = 1
+                  and SerialNum = 1
+                  and isagree = 1
+                  and (content like concat('%', #{Keywords}, '%')
+                 or idea like concat('%', #{Keywords}, '%')
+                 or projectname like concat('%', #{Keywords}, '%'))) od,
              (select max(od.versionid) vid
               from (select projectid,
                            versionid,
@@ -183,7 +187,9 @@
                       and ismain = 1
                       and SerialNum = 1
                       and isagree = 1
-                      and content like concat('%', #{Keywords}, '%')) od
+                      and (content like concat('%', #{Keywords}, '%')
+                       or idea like concat('%', #{Keywords}, '%')
+                       or projectname like concat('%', #{Keywords}, '%')))od
               group by userid) t
         where od.versionid = t.vid;
     </select>

@@ -3,6 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.waveshare.miaochuu.mapper.ProjectMapper">
+    <resultMap id="UserInfoMap" type="com.waveshare.miaochuu.bean.User">
+        <id property="userID" column="userid"></id>
+        <result property="avatarUUID" column="avataruuid"></result>
+        <result property="stateMassage" column="statemassage"></result>
+        <result property="userEmail" column="useremail"></result>
+        <result property="userName" column="username"></result>
+        <result property="exp" column="exp"></result>
+        <association property="level" javaType="com.waveshare.miaochuu.bean.Level">
+            <result property="levelNum" column="levelnum"></result>
+            <result property="needEXP" column="needexp"></result>
+            <result property="rgb" column="rgb"></result>
+        </association>
+    </resultMap>
     <resultMap id="ProjectMap" type="com.waveshare.miaochuu.bean.Project">
 
     </resultMap>
@@ -40,25 +53,14 @@
         where Fork_ProjectID = #{projectID};
     </select>
     <select id="getVersions" resultMap="VersionInfoForListMap">
-        select *
-        from (select VersionID, VersionDate, VersionNum, VideoTitle, UserID, UserName, AvatarUUID
-              from user,
-                   version,
-                   fork
-              where userid = version_userid
-                and version_forkid = forkid
-                and forkid = #{forkID}
-                and isagree = 1
-              union all
-              select VersionID, VersionDate, VersionNum, VideoTitle, UserID, UserName, AvatarUUID
-              from user,
-                   project,
-                   version,
-                   fork
-              where userid = project_userid
-                and Fork_ProjectID=ProjectID
-                and version_forkid = forkid
-                and forkid = #{forkID})a;
+        select VersionID, VersionDate, VersionNum, VideoTittle, UserID, UserName, AvatarUUID
+        from user,
+             version,
+             fork
+        where userid = version_userid
+          and version_forkid = forkid
+          and forkid = #{forkID}
+          and isagree = 1;
     </select>
     <select id="getBulletComments" resultType="com.waveshare.miaochuu.bean.BulletComment">
         select *
@@ -100,9 +102,22 @@
     </select>
     <select id="getFrameworkInfo" resultType="com.waveshare.miaochuu.bean.Framework">
         select FrameworkName
-        from `Project&amp;Framework`,
-             Project
-        where PFW_FrameworkID = FrameworkID
-          and PFW_ProjectID = #{projectID};
+        from `Project&amp;Framework`,Project
+        where PFW_FrameworkID=FrameworkID and PFW_ProjectID=#{projectID};
+    </select>
+    <select id="getUserInfo" resultMap="UserInfoMap">
+        select userid,
+               username,
+               useremail,
+               avataruuid,
+               statemassage,
+               exp,
+               levelnum,
+               needexp,
+               rgb
+        from user,
+             level
+        where userid = #{userID}
+          and user_levelid = levelID;
     </select>
 </mapper>

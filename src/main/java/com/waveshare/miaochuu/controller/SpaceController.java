@@ -86,6 +86,11 @@ public class SpaceController {
     }
 
     //页内操作
+    @RequestMapping("/setpin")
+    public Boolean setPin(@RequestParam("projectid") int projectID){
+        return spaceService.setPin(projectID);
+    }
+
     @RequestMapping("/favorite/add")
     public Boolean addFavorite(@RequestParam("userid") int userID,
                                @RequestParam("favoritename") String favoriteName) {
@@ -137,10 +142,6 @@ public class SpaceController {
     }
 
     //页内操作
-    @RequestMapping("/setpin")
-    public Boolean setPin(@RequestParam("projectid") int projectID) {
-        return spaceService.setPin(projectID);
-    }
     @RequestMapping("/repository/updatedescription")
     public Boolean updateDescription(@RequestParam("descriptionunitid") int descriptionUnitID,
                                      @RequestParam("content") String content,

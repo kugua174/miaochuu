@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ProjectMapper {
+    User getUserInfo(int userID);
     Project getInfo(int projectID);
 
     Version getVersionInfo(int versionID);

@@ -22,4 +22,5 @@ public class ProjectInfo {
     private String versionDate;
     private int clickNum;
     private int chuNum;
+    private int forkID;
 }

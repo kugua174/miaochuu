@@ -18,6 +18,12 @@ public class ProjectServiceImpl implements ProjectService {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Autowired
     ProjectMapper projectMapper;
+
+    @Override
+    public User getUserInfo(int userID) {
+        return projectMapper.getUserInfo(userID);
+    }
+
     @Override
     public Project getInfo(int projectID) {
         return projectMapper.getInfo(projectID);

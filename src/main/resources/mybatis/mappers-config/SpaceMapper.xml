@@ -161,4 +161,5 @@
     <update id="setPin">
         update project set IsPin=1 where projectID=#{projectID} ;
     </update>
+
 </mapper>
